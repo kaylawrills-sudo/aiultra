@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#10151c" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>SightScope AI — Object Detection Platform</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%237c3aed'/></svg>" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="sidebar-brand" href="#" aria-label="SightScope AI home">
+      <span class="brand-mark">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3"/>
+        </svg>
+      </span>
+      <span>SIGHT<span>SCOPE</span></span>
+    </a>
+
+    <nav class="side-nav" aria-label="Primary navigation">
+      <a class="nav-item active" href="#workspace">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg>
+        <span>Workspace</span>
+      </a>
+      <a class="nav-item" href="#models">
+        <svg viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>
+        <span>Models</span>
+      </a>
+      <a class="nav-item" href="#results">
+        <svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg>
+        <span>Results</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="engine-status"><span class="status-dot"></span><span>API connected</span></div>
+      <div class="version">YOLO inference</div>
+    </div>
+  </aside>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="breadcrumb"><span>Platform</span><b>/</b><strong>Object Detection</strong></div>
+        <h1>SightScope workspace</h1>
+      </div>
+      <div class="topbar-actions">
+        <button id="installAppBtn" class="install-app-btn hidden" type="button">Install app</button>
+        <div class="model-chip" id="models">
+          <span class="model-chip-icon">Y</span>
+          <div><small>Active model</small><strong>YOLO Detection</strong></div>
+        </div>
+      </div>
+    </header>
+
+    <main class="platform-main" id="workspace">
+      <section class="workspace-grid">
+        <div class="card preview-card">
+          <div class="card-header">
+            <div>
+              <span class="section-kicker">Input</span>
+              <h2>Image workspace</h2>
+            </div>
+            <button id="resetBtn" class="btn-ghost hidden" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+              New image
+            </button>
+          </div>
+
+          <div class="source-switch" role="tablist" aria-label="Image source">
+            <button id="uploadTab" class="source-tab active" type="button" role="tab" aria-selected="true">
+              <svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg>
+              Upload
+            </button>
+            <button id="webcamTab" class="source-tab" type="button" role="tab" aria-selected="false">
+              <svg viewBox="0 0 24 24"><path d="M4 7h3l2-3h6l2 3h3v12H4z"/><circle cx="12" cy="13" r="3"/></svg>
+              Webcam
+            </button>
+          </div>
+
+          <div id="dropZone" class="drop-zone">
+            <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" hidden />
+            <div class="upload-icon-circle">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg>
+            </div>
+            <h3>Drop an image to start</h3>
+            <p>or <span class="purple-link">browse files</span> from your device</p>
+            <div class="format-row"><span>JPG</span><span>PNG</span><span>WEBP</span><span>10 MB max</span></div>
+          </div>
+
+          <div id="webcamPanel" class="webcam-panel hidden">
+            <video id="webcamVideo" autoplay playsinline muted></video>
+            <div id="cameraUnavailable" class="camera-unavailable hidden"><p>Camera unavailable. Allow camera access and try again.</p></div>
+            <div class="webcam-actions">
+              <button id="startCameraBtn" class="btn-primary" type="button">Start camera</button>
+              <button id="captureBtn" class="btn-primary" type="button" disabled>Capture photo</button>
+              <button id="stopCameraBtn" class="btn-ghost hidden" type="button">Stop</button>
+            </div>
+          </div>
+
+          <div id="canvasWrapper" class="canvas-wrapper hidden">
+            <canvas id="outputCanvas"></canvas>
+            <div id="loaderOverlay" class="loader-overlay hidden">
+              <div class="spinner"></div>
+              <div><strong>Running inference</strong><span>Analyzing objects and confidence</span></div>
+            </div>
+          </div>
+
+          <div class="action-bar">
+            <div class="slider-group">
+              <div class="slider-label"><label for="confThreshold">Confidence threshold</label><strong id="confValue">25%</strong></div>
+              <input type="range" id="confThreshold" min="5" max="95" value="25" />
+            </div>
+            <button id="detectBtn" class="btn-primary" disabled>
+              Run detection
+              <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="card results-card" id="results">
+          <div class="card-header">
+            <div>
+              <span class="section-kicker">Output</span>
+              <h2>Detection results</h2>
+            </div>
+            <span id="detectionCount" class="count-pill">0 objects</span>
+          </div>
+
+          <div id="errorBanner" class="error-banner hidden"></div>
+
+          <div id="emptyState" class="empty-state">
+            <div class="empty-graphic">
+              <svg viewBox="0 0 80 80"><rect x="10" y="10" width="60" height="60" rx="10"/><path d="M10 53l16-16 12 12 12-12 20 20"/><circle cx="50" cy="28" r="6"/></svg>
+            </div>
+            <h3>Ready for analysis</h3>
+            <p>Upload an image, adjust the confidence threshold, then run detection.</p>
+          </div>
+
+          <div id="resultsList" class="results-list hidden"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

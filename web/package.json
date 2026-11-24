@@ -1,0 +1,17 @@
+{
+  "name": "sightscope-ai",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "SightScope AI - an intelligent object detection platform powered by Ultralytics YOLO",
+  "engines": {
+    "node": "20.x"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.10"
+  }
+}
