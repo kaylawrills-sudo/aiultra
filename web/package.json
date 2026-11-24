@@ -5,7 +5,7 @@
   "type": "module",
   "description": "SightScope AI - an intelligent object detection platform powered by Ultralytics YOLO",
   "engines": {
-    "node": "20.x"
+    "node": "26.x"
   },
   "scripts": {
     "start": "node server.js",
