@@ -1,4 +1,9 @@
 {
+  "rewrites": [
+    { "source": "/api/predict", "destination": "/api/predict.js" },
+    { "source": "/", "destination": "/public/index.html" },
+    { "source": "/(.*)", "destination": "/public/$1" }
+  ],
   "headers": [
     {
       "source": "/(.*)",
